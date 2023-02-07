@@ -1,27 +1,19 @@
-mov cx, 5
-mov bx, 10
+[org 0x7c00]
+[bits 16]
 
-looop:
-	cmp cx, 20
-	je  end
-	cmp cx, bx
-	jg  yes
-	jmp no
+ mov bp, 0x8000	; setting the stack to 0x8000
+ mov sp, bp
 
-yes:
-	mov al, 'Y'
-	jmp	print
-no:
-	mov al, 'N'	
-print:
-	mov ah, 0x0e
-	int 0x10
-	mov al, 10
-	int 0x10
-	inc cx
-	jmp looop
-end:
-	jmp end
+;call printHex
 
-times 510 -( $ - $$ ) db 0
+mov ax, 0xFFFF
+call printHex
+ 
+inf:
+	jmp inf
+
+ %include "print.asm"
+
+;; our magic number and padding
+times 510 - ($ - $$) db 0	
 dw 0xaa55
