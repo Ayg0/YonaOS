@@ -1,4 +1,3 @@
-[org 0x7c00]
 [bits 16]
 
  mov bp, 0x8000	; setting the stack to 0x8000
@@ -6,11 +5,17 @@
 
 ;call printHex
 
-mov ax, 0xFFFF
+mov ax, 0x7c0
+mov ds, ax
+
+mov ax, [num]
 call printHex
  
 inf:
 	jmp inf
+
+num:
+	dw 0x7c
 
  %include "print.asm"
 
