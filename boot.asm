@@ -11,8 +11,8 @@ mov [DiskId] , dl; storing the disk id we've got the boot sector from
 
 ; Reading data
 mov ax, 0
-mov es, ax
-mov bx, 0x9000 ; where to put the date we read from the disk
+mov es, ax		; init es with 0
+mov bx, 0x9000	; where to put the date we read from the disk
 mov dl, [DiskId]; read from the same drive we've got the boot sector from
 call SectorsLoading	; call the loading sectors routine
 mov ax, [es:0x9000]	; get what's inside address 0x9000 (should be 0xFAFA)
