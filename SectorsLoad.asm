@@ -1,5 +1,9 @@
 SectorsLoading:
 	pusha
+	mov ax, 0
+	mov es, ax		; init es with 0
+	mov bx, 0x9000	; where to put the data we read from the disk
+	mov dl, [DiskId]; read from the same drive we've got the boot sector from
 	mov ah, 0x02; read sector BIOS
 	mov al, [num_sector]	; number of sectors
 	mov ch, 0x00; cylinder 0
