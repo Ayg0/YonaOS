@@ -52,8 +52,8 @@ DiskId:
 num_sector:
 	db 20	; how many sectors to read
 
- %include "print.asm"
- %include "SectorsLoad.asm"
+ %include "BIOS_UTILS/print.asm"
+ %include "BIOS_UTILS/SectorsLoad.asm"
  %include "GDT.asm"
 
 ;; our magic number and padding
