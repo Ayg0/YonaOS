@@ -1,5 +1,6 @@
 [org 0x7c00]
 kernel_start equ 0x9000
+VIDEO_MEMORY equ 0xb8000
 
 xor ax, ax
 mov es, ax
@@ -42,8 +43,8 @@ StartingProtectedMode:
 	mov esp , ebp
 
 	mov ah, 0x0f
-	mov al, 'A'
-	mov [0xb8000], ax
+	mov al, 'T'
+	mov [VIDEO_MEMORY + 8], ax
 
 inf:
 	jmp inf
