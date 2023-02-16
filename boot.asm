@@ -59,9 +59,7 @@ StartingProtectedMode:
 	mov esp , ebp
 
 	call writ
-	mov ah, 0xf0
-	mov al, 'E'
-	mov [0xb8000], ax
+	call kernel_start
 
 inf:
 	jmp inf
@@ -73,8 +71,8 @@ num_sector:
 writ:
 	pusha
 	mov ah, 0xf0
-	mov al, [kernel_start]
-	mov [0xb8000 + 2], ax
+	mov al, 'E'
+	mov [0xb8000], ax
 	popa
 	ret
 
@@ -83,4 +81,3 @@ writ:
 ;; our magic number and padding
 times 510 - ($ - $$) db 0
 dw 0xaa55
-times 1024 db "A"
