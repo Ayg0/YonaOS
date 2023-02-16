@@ -73,7 +73,7 @@ num_sector:
 writ:
 	pusha
 	mov ah, 0xf0
-	mov al, 'E'
+	mov al, [kernel_start]
 	mov [0xb8000 + 2], ax
 	popa
 	ret
@@ -83,4 +83,4 @@ writ:
 ;; our magic number and padding
 times 510 - ($ - $$) db 0
 dw 0xaa55
-times 5024 db 0
+times 1024 db "A"
