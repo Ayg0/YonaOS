@@ -1,4 +1,4 @@
-#include "general.h"
+#include "INCLUDE/general.h"
 
 extern int	main();
 
@@ -10,6 +10,5 @@ int	main() {
 		print_char(s[j], 0x0f, j, 0);
 		j++;
 	}
-	
 	return (5);
 }

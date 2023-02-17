@@ -58,7 +58,6 @@ StartingProtectedMode:
 	mov ebp , 0x90000 ; Update our stack position so it is right at the top of the free space.
 	mov esp , ebp
 
-	call writ
 	call kernel_start
 
 inf:
