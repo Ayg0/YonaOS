@@ -1,5 +1,5 @@
 [org 0x7c00]
-kernel_start equ 0xa000
+kernel_start equ 0x1000
 VIDEO_MEMORY equ 0xb8000
 
 xor ax, ax
