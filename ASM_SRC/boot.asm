@@ -76,7 +76,7 @@ writ:
 	popa
 	ret
 
- %include "GDT.asm"
+ %include "ASM_SRC/GDT.asm"
 
 ;; our magic number and padding
 times 510 - ($ - $$) db 0
