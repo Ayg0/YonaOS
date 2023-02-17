@@ -5,7 +5,7 @@ a Hobby Operating System, minimalistic 32bit machine to run my weird code, check
 ### [X] Assembly + Bootable
 ### [X] Reading from the Disk
 ### [X] change to 32 bit mode
-### [' '] Kernel in C/C++
+### [X] Coding in C/C++
 
 ## How To Test:
   simply have qemu and nasm installed and use:
