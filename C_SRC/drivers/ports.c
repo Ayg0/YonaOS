@@ -1,4 +1,4 @@
-#include "../INCLUDE/general.h"
+#include "../INCLUDE/system.h"
 
 
 // asm ( assembler template : output operands : input operands);

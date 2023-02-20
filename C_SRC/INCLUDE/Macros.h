@@ -3,8 +3,8 @@
 
 //SCREEN RELATED
 	# define VIDEOMEMORY 0xb8000
-	# define MAX_ROW 80
-	# define MAX_COL 25
+	# define MAX_COL 80
+	# define MAX_ROW 25
 	//colors:
 		// black on white
 		# define WB	0x0f
