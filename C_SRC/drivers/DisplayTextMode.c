@@ -18,32 +18,28 @@ void	screen_init(u16 mode){
 	_screen._cursor.y = 0;
 }
 
-void	get_cursor(u32 *col, u32 *row){
-	
-}
 // setting the location of the cursor
 int	set_cursor(u16 x, u16 y){
 	u8 location;
 
 	if (x >= MAX_COL || y >= MAX_ROW)
-		return -1;
+		return (-1);
 	_screen._cursor.x = x;
 	_screen._cursor.y = y;
-	location = (x * 2) + (y * MAX_COL * 2);
-//	read more about the Cursor Start Register (0x0A)
-	Pbyte_out(0x3D4, 0x0A);
-	Pbyte_out(0x3D5, (Pbyte_in(0x3D5) & 0xC0) | location);
-//	read more about the Cursor End Register (0x0B)
-	Pbyte_out(0x3D4, 0x0B);
-	Pbyte_out(0x3D5, (Pbyte_in(0x3D5) & 0xE0) | location);
+	location = x + (y * MAX_COL);
+	// read more about the Cursor Location High Register (Index 0x0E)
+    Pbyte_out(SCREEN_CRTL, 0x0E);
+    Pbyte_out(SCREEN_DATA, (location >> 8));
+	// read more about the Cursor Location Low Register (Index 0x0F)
+    Pbyte_out(SCREEN_CRTL, 0x0F);
+    Pbyte_out(SCREEN_DATA, (location & 0xff));
 	return 0;
 }
 
 void	cursor_mode(u8 enabled){
 	if (_screen._cursor.mode == enabled)
 		return	;
-
-	if (!enabled)
+	if (enabled)
 	{
 		Pbyte_out(0x3D4, 0x0A);
 		Pbyte_out(0x3D5, Pbyte_in(0x3D5) & 0xDF);
@@ -68,6 +64,7 @@ void	put_char(u8 c, u16 attr){
 		_screen._cursor.x = 0;
 		_screen._cursor.y++;
 	}
+	set_cursor(_screen._cursor.x, _screen._cursor.y);
 	return;
 }
 

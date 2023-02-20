@@ -6,7 +6,10 @@ extern int	main();
 
 int	main() {
 	char *s = "Imane l3iyana";
-	set_cursor(6, 6);
+	screen_init(1);
+	set_cursor(2, 2);
+	cursor_mode(0);
+	cursor_mode(1);
 	put_str(s, 0);
 	return (5);
 }
