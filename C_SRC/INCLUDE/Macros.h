@@ -4,6 +4,7 @@
 //SCREEN RELATED
 	# define VIDEOMEMORY 0xb8000
 	# define MAX_COL 80
+	# define MAX_COL_2 160
 	# define MAX_ROW 25
 	//colors:
 		// black on white
@@ -15,9 +16,5 @@
 		The index byte is written to the port given, then the data byte
 		can be read/written from/to port+1 (0x3D5)
 	*/
-	# define SCREEN_DATA 0x3D5
-
-
-
-	
+	# define SCREEN_DATA 0x3D5	
 #endif

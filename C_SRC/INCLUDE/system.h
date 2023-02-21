@@ -3,6 +3,7 @@
 # include "Macros.h"
 # include "typedefs.h"
 # include "display.h"
+# include "libt.h"
 
 // used by drivers:
 void	Pword_out(u16 port_number, u16 value);

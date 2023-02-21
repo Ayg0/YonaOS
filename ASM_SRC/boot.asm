@@ -65,7 +65,7 @@ inf:
 DiskId:
 	db 0
 num_sector:
-	db 2	; how many sectors to read
+	db 20	; how many sectors to read
 
 writ:
 	pusha
