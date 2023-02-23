@@ -2,20 +2,16 @@
 
 screen	_screen;
 
-/*
-	/Initialization routine
-	/Cursor control routines
-	//Drawing routines
-	//Font rendering routines
-	/Input/output routines
-	/Mode switching routines
-	//Memory management routines
-*/
 // basic screen init
 void	screen_init(u16 mode){
 	_screen._cursor.mode = 1;
 	_screen._cursor.x = 0;
 	_screen._cursor.y = 0;
+	_screen.default_attr = WB;
+}
+// set the default attribute for the characters on screen
+void	set_default_attr(u16 attr){
+	_screen.default_attr = attr;
 }
 
 // setting the location of the cursor
@@ -79,7 +75,7 @@ void	put_char(u8 c, u8 use_default, u16 attr){
 	return;
 }
 // put a string into the screen
-int	put_str(u8 *s, u16 attr){
+int	put_str(u8 *s){
 	u32	i;
 
 	i = 0;
@@ -101,15 +97,14 @@ void	clrs(){
 		t_WordSet((void *)VIDEOMEMORY + (i * MAX_COL_2), 0x0f00, 80);
 	set_cursor(0, 0);
 }
-// print a number in binary('b'), decimal('d') or hex('h') formats
+// print a number in BINARY_FORMAT, DECIMAL_FORMAT or HEX_FORMAT.
 void put_nbr(u32 nbr, u8 format){
 	char *hex = "0123456789ABCDEF";
 	char *decimal = "0123456789";
 	char *binary = "01";
 
-	format == 'h' && put_str("0x", 0) && put_nbr_base(nbr, hex, 16);
+	format == 'h' && put_str("0x") && put_nbr_base(nbr, hex, 16);
 	format == 'd' && put_nbr_base(nbr, decimal, 10);
 	format == 'b' && put_nbr_base(nbr, binary, 2);
 	return ;
 }
-// scroll the screen

@@ -65,15 +65,7 @@ inf:
 DiskId:
 	db 0
 num_sector:
-	db 20	; how many sectors to read
-
-writ:
-	pusha
-	mov ah, 0xf0
-	mov al, 'E'
-	mov [0xb8000], ax
-	popa
-	ret
+	db 50	; how many sectors to read
 
  %include "ASM_SRC/GDT.asm"
 
