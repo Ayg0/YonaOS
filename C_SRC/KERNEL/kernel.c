@@ -1016,12 +1016,15 @@ void	draw_weird(){
 
 int	main() {
 	screen_init(1);
-	draw_weird();
-	
-	
-//∆	clrs();
-	//put_str("\r", 0);
-	//put_str("\n", 0);
-	//put_str("ok", 0);
+	//draw_weird();
+	//cursor_mode(0);
+	set_cursor(75, 24);
+	//set_default_attr(get_attr(GREEN, BLACK, 0));
+	put_str("s\rq");
+	//u8 l = get_attr(BLUE, GRAY, 1);
+	//put_nbr(l, HEX_FORMAT);
+	//set_default_attr(l);
+	//set_unset_blinking(1);
+	//put_str("Helwfawfawff");
 	return (5);
 }
