@@ -1,9 +1,10 @@
 #ifndef GENERAL_H
 # define GENERAL_H
-# include "Macros.h"
+# include "macros.h"
 # include "typedefs.h"
 # include "display.h"
 # include "libt.h"
+# include "descriptor_tables.h"
 
 // used by drivers:
 void	Pword_out(u16 port_number, u16 value);

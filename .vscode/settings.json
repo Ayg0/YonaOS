@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"system.h": "c"
+		"system.h": "c",
+		"libt.h": "c",
+		"descriptor_tables.h": "c"
 	}
 }

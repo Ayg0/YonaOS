@@ -14,7 +14,8 @@ C_OBJ := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(C_SRC))
 all: $(C_OBJ)
 	nasm -f bin ASM_SRC/empty.asm -o $(OBJDIR)/ASM/empty.o
 	nasm ASM_SRC/kernel_start.asm -f elf -o $(OBJDIR)/ASM/kernel_start.o
-	$(LD) $(LFLAGS) -o $(OBJDIR)/ASM/kernel.bin  $(OBJDIR)/ASM/kernel_start.o $(C_OBJ)
+	nasm C_SRC/IDT/ISRs.asm -f elf -o $(OBJDIR)/ASM/ISRs.o
+	$(LD) $(LFLAGS) -o $(OBJDIR)/ASM/kernel.bin $(OBJDIR)/ASM/kernel_start.o $(OBJDIR)/ASM/ISRs.o $(C_OBJ)
 	nasm ASM_SRC/boot.asm -f bin -o $(OBJDIR)/ASM/boot.bin
 	cat $(OBJDIR)/ASM/boot.bin $(OBJDIR)/ASM/kernel.bin $(OBJDIR)/ASM/empty.o > $(NAME)
 	qemu-system-i386 $(NAME)
@@ -27,7 +28,7 @@ $(OBJDIR):
 
 fclean:
 	rm -rf $(NAME) $(OBJDIR)/ASM/boot.bin $(OBJDIR)/ASM/kernel_start.o \
-	$(OBJDIR)/ASM/kernel.bin $(C_OBJ) $(OBJDIR)/ASM/empty.o
+	$(OBJDIR)/ASM/kernel.bin $(C_OBJ) $(OBJDIR)/ASM/empty.o $(OBJDIR)/ASM/ISRs.o
 re:
 	make fclean && make
 .PHONY: OBJ fclean all 

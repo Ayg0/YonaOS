@@ -1014,17 +1014,12 @@ void	draw_weird(){
 }
 
 
-int	main() {
+extern int	main() {
 	screen_init(1);
-	//draw_weird();
-	//cursor_mode(0);
-	set_cursor(75, 24);
-	//set_default_attr(get_attr(GREEN, BLACK, 0));
-	put_str("s\rq");
-	//u8 l = get_attr(BLUE, GRAY, 1);
-	//put_nbr(l, HEX_FORMAT);
-	//set_default_attr(l);
-	//set_unset_blinking(1);
-	//put_str("Helwfawfawff");
+	init_descriptor_tables();
+
+	put_str("ok");
+	__asm__ __volatile__ ("int $2");
+	
 	return (5);
 }

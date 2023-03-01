@@ -13,9 +13,8 @@ void	screen_init(u16 mode){
 void	set_default_attr(u16 attr){
 	_screen.default_attr = attr;
 }
-
 // setting the location of the cursor
-int	set_cursor(u16 x, u16 y){
+u8	set_cursor(u8 x, u8 y){
 	u16 location;
 
 	_screen._cursor.x = x;
@@ -35,9 +34,7 @@ void	cursor_mode(u8 enabled){
 	if (enabled)
 	{
 		Pbyte_out(0x3D4, 0x0A);
-		Pbyte_out(0x3D5, Pbyte_in(0x3D5) & 0xC0);
-		Pbyte_out(0x3D4, 0x0B);
-		Pbyte_out(0x3D5, (Pbyte_in(0x3D5) & 0xE0) | 15);
+		Pbyte_out(0x3D5, Pbyte_in(0x3D5) & 0xDF);
 	}
 	else{
 		Pbyte_out(0x3D4, 0x0A);
@@ -53,16 +50,16 @@ int	put_nbr_base(u32 nbr, char *s, u8 base_len){
 	return (7);
 }
 
-void exit(){
-	put_char('T', 0, get_attr(RED,BLACK,0));
-	put_char('T', 0, get_attr(RED,BLACK,0));
-	while(1);
-}
-
 // check the position if it's valid
 u8	position_check(){
 	u8	err_flag = 0;
-
+	
+	if (_screen._cursor.x > MAX_COL || _screen._cursor.y > MAX_ROW)
+	{
+		set_default_attr(get_attr(RED, BLACK));
+		_screen._cursor.x = 0;
+		_screen._cursor.y = 0;
+	}
 	if (_screen._cursor.x == MAX_COL){
 		
 		_screen._cursor.x = 0;
@@ -86,21 +83,22 @@ void	put_char(u8 c, u8 use_default, u16 attr){
 
 	if (use_default)
 		attr = _screen.default_attr;
-	position_check();
+	_screen._cursor.mode && position_check();
 	location = (_screen._cursor.x + _screen._cursor.y * MAX_COL) * 2;
 	*((u8 *)VIDEOMEMORY + location) = c;
 	*((u8 *)VIDEOMEMORY + location + 1) = attr;
 	_screen._cursor.x++;
-	set_cursor(_screen._cursor.x, _screen._cursor.y);
+	_screen._cursor.mode && set_cursor(_screen._cursor.x, _screen._cursor.y);
 	return;
 }
 // put a string into the screen
-int	put_str(u8 *s){
+u8	put_str(u8 *s){
 	u32	i;
 
 	i = 0;
 	while (s[i])
 	{
+		//put_nbr(_screen._cursor.x, DECIMAL_FORMAT);
 		if (s[i] == '\r')
 			set_cursor((_screen._cursor.x = 0), (_screen._cursor.y));
 		else if (s[i] == '\n')
@@ -130,11 +128,6 @@ void put_nbr(u32 nbr, u8 format){
 }
 
 // make an attribute for Text Mode
-u8 get_attr(u8 forground_color, u8 back_ground_color, u8 blinking_flag){
-	return (((back_ground_color << 4) | forground_color) | blinking_flag << 7);
+u8 get_attr(u8 foreground_color, u8 back_ground_color){
+	return ((back_ground_color << 4) | (foreground_color && 0x0f));
 }
-
-//void set_unset_blinking(int flag){
-//	Pbyte_out(SCREEN_CRTL, 0x10);
-//	Pbyte_out(SCREEN_DATA, Pbyte_in(0x10) | );
-//}
