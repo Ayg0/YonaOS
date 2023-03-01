@@ -7,46 +7,6 @@
 idt_gate	idt_gates[256];
 idt_ptr		idt_p;
 
-// msgs for each interrupt:
-char *interrupt_msgs[] = {
-    "Division By Zero",
-    "One step exception",
-    "Non Maskable Interrupt",
-    "Breakpoint",
-    "Overflow",
-    "bound Range Exceeded",
-    "Invalid Opcode",
-    "Device Not Available",
-
-    "Double Fault",
-    "Coprocessor Segment Overrun",
-    "Invalid TSS",
-    "Segment Not Present",
-    "Stack-Segment Fault",
-    "General Protection Fault",
-    "Page Fault",
-    "Reserved",
-
-    "x87 Floating-Point Exception",
-    "Alignment Check",
-    "Machine Check",
-    "SIMD Floating-Point Exception",
-    "Virtualization Exception",
-    "Control Protection Exception",
-    "Reserved",
-    "Reserved",
-
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Hypervisor Injection Exception",
-    "VMM Communication Exception",
-    "Security Exception",
-    "Reserved"
-};
-
-
 static void	idt_set_gate(u8 index, u32 handler, u16 selector, u8 type_attr){
 	idt_gates[index].low_base = handler & 0xffff; 
 	idt_gates[index].high_base = (handler >> 16) && 0xffff; 
@@ -92,22 +52,57 @@ static void	idt_install(){
 
 
 static void	init_idt(){
-	idt_install();
 	idt_p.limit = sizeof(idt_gate) * (256 - 1);
 	idt_p.base = (u32)&idt_gates;
+	idt_install();
+	__asm__ __volatile__ ("lidt (%%eax)": : "a"(&idt_p));
+}
 
-	t_byteSet(&idt_gates, 0, sizeof(idt_gate) * 256);
-	
-	//__asm__ __volatile__ ("lidt (%%eax)": : "a"(&idt_p));
-	 __asm__ __volatile__("lidtl (%0)" : : "r" (&idt_p));
+char *interrupt_msgs(u8 index){
+	switch (index)
+	{
+	case 0:	return("Division By Zero");
+	case 1:	return("One step exception");
+	case 2:	return ("Non Maskable Interrupt");
+    case 3:	return ("Breakpoint");
+    case 4:	return ("Overflow");
+    case 5:	return ("bound Range Exceeded");
+    case 6:	return ("Invalid Opcode");
+    case 7:	return ("Device Not Available");
+    case 8:	return ("Double Fault");
+    case 9:	return ("Coprocessor Segment Overrun");
+    case 10:	return ("Invalid TSS");
+    case 11:	return ("Segment Not Present");
+    case 12:	return ("Stack-Segment Fault");
+    case 13:	return ("General Protection Fault");
+    case 14:	return ("Page Fault");
+    case 15:	return ("Reserved");
+    case 16:	return ("x87 Floating-Point Exception");
+    case 17:	return ("Alignment Check");
+    case 18:	return ("Machine Check");
+    case 19:	return ("SIMD Floating-Point Exception");
+    case 20:	return ("Virtualization Exception");
+    case 21:	return ("Control Protection Exception");
+    case 22:	return ("Reserved");
+    case 23:	return ("Reserved");
+    case 24:	return ("Reserved");
+    case 25:	return ("Reserved");
+    case 26:	return ("Reserved");
+    case 27:	return ("Reserved");
+    case 28:	return ("Hypervisor Injection Exception");
+    case 29:	return ("VMM Communication Exception");
+    case 30:	return ("Security Exception");
+    case 31:	return ("Reserved");
+	default:	return ("Unknown");
+	}
 }
 
 extern void	isr_handler(_registers r){
 	put_str("\r\n");
 	put_str("Inerrupt received: ");
 	put_nbr(r.int_no, HEX_FORMAT);
-	put_str(" ");
-	put_str(interrupt_msgs[r.int_no]);
+	put_str(" >> ");
+	put_str(interrupt_msgs(r.int_no));
 	put_str("\r\n");
 }
 

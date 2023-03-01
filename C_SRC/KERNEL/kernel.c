@@ -1019,7 +1019,7 @@ extern int	main() {
 	init_descriptor_tables();
 
 	put_str("ok");
-	__asm__ __volatile__ ("int $2");
+	__asm__ __volatile__ ("int $0");
 	
 	return (5);
 }
