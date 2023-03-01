@@ -1,11 +1,8 @@
-#include "../INCLUDE/descriptor_tables.h"
-#include "../INCLUDE/typedefs.h"
-#include "../INCLUDE/libt.h"
-
-#define CODE_SEGMENT 0x08
-
-idt_gate	idt_gates[256];
-idt_ptr		idt_p;
+#include "../../INCLUDE/descriptor_tables.h"
+#include "../../INCLUDE/libt.h"
+// idt vars
+_idt_gate	idt_gates[256];
+_idt_ptr	idt_p;
 
 // set the handler in it's own gate in the IDT
 static void	idt_set_gate(u8 index, u32 handler, u16 selector, u8 type_attr){
@@ -15,7 +12,7 @@ static void	idt_set_gate(u8 index, u32 handler, u16 selector, u8 type_attr){
 	idt_gates[index].always0 = 0;
 	idt_gates[index].type_attr = type_attr;
 }
-// TR: https://chamilo.grenoble-inp.fr/courses/ENSIMAG4MMPCSEF/document/traps.pdf
+// R https://chamilo.grenoble-inp.fr/courses/ENSIMAG4MMPCSEF/document/traps.pdf
 // defining the msgs of each interrupt
 static	char *interrupt_msgs(u8 index){
 	switch (index)
@@ -68,8 +65,8 @@ static void	init_handlers(){
 		idt_set_gate(i, handlers[i], CODE_SEGMENT, 0x8E);
 }
 // initializing the idt
-static void	init_idt(){
-	idt_p.limit = sizeof(idt_gate) * (256 - 1);	// defining the size of the idt.
+void	init_idt(){
+	idt_p.limit = sizeof(_idt_gate) * (256 - 1);	// defining the size of the idt.
 	idt_p.base = (u32)&idt_gates;				// defining the start address of the idt.
 	init_handlers();							// filling the idt with the corresponding ISRS.
 	__asm__ __volatile__ ("lidt (%%eax)": : "a"(&idt_p));	// loading the idt into the IDTR.
@@ -82,9 +79,4 @@ extern void	isr_handler(_registers r){
 	put_nbr(r.int_no, HEX_FORMAT);
 	set_default_attr(WHITE_ON_BLACK);
 	put_str(interrupt_msgs(r.int_no));
-}
-// initializing the descriptor tables I may add the gdt too
-void	init_descriptor_tables(){
-	// initializing the interrupts descriptor table
-	init_idt();
 }

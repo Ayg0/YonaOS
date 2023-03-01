@@ -65,7 +65,7 @@ inf:
 DiskId:
 	db 0
 num_sector:
-	db 51	; how many sectors to read
+	db 52	; how many sectors to read
 
  %include "ASM_SRC/GDT.asm"
 
