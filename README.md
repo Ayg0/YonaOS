@@ -7,7 +7,7 @@ a Hobby Operating System, minimalistic 32bit machine to run my weird code, check
 ### [X] change to 32 bit mode
 ### [X] Coding in C/C++
 ### [X] Working on the display driver (Text Mode)
-### [' '] Saying hi to interrupts again
+### [X] Defining and setting the IDT (Interrupts Descriptor Table).
 ### [' '] Working on the keyboard driver
 
 ## How To Test:

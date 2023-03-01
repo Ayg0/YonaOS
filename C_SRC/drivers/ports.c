@@ -16,7 +16,6 @@ u8 Pbyte_in(u16 port_number){
 	__asm__ __volatile__ ("in %%dx, %%al" : "=a"(result) : "d"(port_number));
 	return result ;
 }
-
 // Read a Word from Port_number
 u16 Pword_in(u16 port_number){
 	u16 result;
@@ -33,7 +32,6 @@ void	Pbyte_out(u16 port_number, u8 value){
 	*/
 	__asm__ __volatile__ ("out %%al, %%dx" : : "a"(value), "d"(port_number));
 }
-
 // Write a Word to Port_number
 void	Pword_out(u16 port_number, u16 value){
 	__asm__ __volatile__ ("out %%ax, %%dx" : : "a"(value), "d"(port_number));

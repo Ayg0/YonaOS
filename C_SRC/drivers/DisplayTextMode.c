@@ -46,7 +46,7 @@ void	cursor_mode(u8 enabled){
 int	put_nbr_base(u32 nbr, char *s, u8 base_len){
 	if (nbr >= base_len)
 		put_nbr_base(nbr / base_len, s, base_len);
-	put_char(s[nbr % base_len], 0, 0x09);
+	put_char(s[nbr % base_len], 1, 0);
 	return (7);
 }
 
@@ -129,5 +129,5 @@ void put_nbr(u32 nbr, u8 format){
 
 // make an attribute for Text Mode
 u8 get_attr(u8 foreground_color, u8 back_ground_color){
-	return ((back_ground_color << 4) | (foreground_color && 0x0f));
+	return ((back_ground_color << 4) | (foreground_color & 0x0f));
 }

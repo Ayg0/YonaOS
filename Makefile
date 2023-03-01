@@ -12,6 +12,7 @@ C_SRC := $(shell find $(SRCDIR) -type f -name '*.c')
 C_OBJ := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(C_SRC))
 
 all: $(C_OBJ)
+	mkdir -p BUILD $(OBJDIR)/ASM
 	nasm -f bin ASM_SRC/empty.asm -o $(OBJDIR)/ASM/empty.o
 	nasm ASM_SRC/kernel_start.asm -f elf -o $(OBJDIR)/ASM/kernel_start.o
 	nasm C_SRC/IDT/ISRs.asm -f elf -o $(OBJDIR)/ASM/ISRs.o
@@ -27,8 +28,7 @@ $(OBJDIR):
 	mkdir -p $(dir $(C_OBJ))
 
 fclean:
-	rm -rf $(NAME) $(OBJDIR)/ASM/boot.bin $(OBJDIR)/ASM/kernel_start.o \
-	$(OBJDIR)/ASM/kernel.bin $(C_OBJ) $(OBJDIR)/ASM/empty.o $(OBJDIR)/ASM/ISRs.o
+	rm -rf $(NAME) $(OBJDIR)/*
 re:
 	make fclean && make
 .PHONY: OBJ fclean all 

@@ -1,39 +1,6 @@
 ; Read more about those exceptions:
 ;	https://wiki.osdev.org/Exceptions
 
-[global isr0]
-[global isr1]
-[global isr2]
-[global isr3]
-[global isr4]
-[global isr5]
-[global isr6]
-[global isr7]
-[global isr8]
-[global isr9]
-[global isr10]
-[global isr11]
-[global isr12]
-[global isr13]
-[global isr14]
-[global isr15]
-[global isr16]
-[global isr17]
-[global isr18]
-[global isr19]
-[global isr20]
-[global isr21]
-[global isr22]
-[global isr23]
-[global isr24]
-[global isr25]
-[global isr26]
-[global isr27]
-[global isr28]
-[global isr29]
-[global isr30]
-[global isr31]
-
 [extern isr_handler]
 
 ; common ISR:
@@ -57,223 +24,56 @@ isr_common:
 	mov gs, ax
 	popa
 	add esp, 8
-	sti
-	iret
+	sti		; set interrupts again.
+	iret	; pop eip, cs, eflgs, useresp, ss at the same time.
 
-; 0: Divide By Zero Exception
-isr0:
+; macro to define an isr that has no error code
+%macro ISR_NOERRCODE 1
+  [GLOBAL isr%1]
+  isr%1:
     cli
     push byte 0
-    push byte 0
+    push byte %1
     jmp isr_common
-
-; 1: Debug Exception
-isr1:
+%endmacro
+; macro to define an isr that has an error code
+%macro ISR_ERRCODE 1
+  [GLOBAL isr%1]
+  isr%1:
     cli
-    push byte 0
-    push byte 1
+    push byte %1
     jmp isr_common
-
-; 2: Non Maskable Interrupt Exception
-isr2:
-    cli
-    push byte 0
-    push byte 2
-    jmp isr_common
-
-; 3: Int 3 Exception
-isr3:
-    cli
-    push byte 0
-    push byte 3
-    jmp isr_common
-
-; 4: INTO Exception
-isr4:
-    cli
-    push byte 0
-    push byte 4
-    jmp isr_common
-
-; 5: Out of Bounds Exception
-isr5:
-    cli
-    push byte 0
-    push byte 5
-    jmp isr_common
-
-; 6: Invalid Opcode Exception
-isr6:
-    cli
-    push byte 0
-    push byte 6
-    jmp isr_common
-
-; 7: Coprocessor Not Available Exception
-isr7:
-    cli
-    push byte 0
-    push byte 7
-    jmp isr_common
-
-; 8: Double Fault Exception (With Error Code!)
-isr8:
-    cli
-    push byte 8
-    jmp isr_common
-
-; 9: Coprocessor Segment Overrun Exception
-isr9:
-    cli
-    push byte 0
-    push byte 9
-    jmp isr_common
-
-; 10: Bad TSS Exception (With Error Code!)
-isr10:
-    cli
-    push byte 10
-    jmp isr_common
-
-; 11: Segment Not Present Exception (With Error Code!)
-isr11:
-    cli
-    push byte 11
-    jmp isr_common
-
-; 12: Stack Fault Exception (With Error Code!)
-isr12:
-    cli
-    push byte 12
-    jmp isr_common
-
-; 13: General Protection Fault Exception (With Error Code!)
-isr13:
-    cli
-    push byte 13
-    jmp isr_common
-
-; 14: Page Fault Exception (With Error Code!)
-isr14:
-    cli
-    push byte 14
-    jmp isr_common
-
-; 15: Reserved Exception
-isr15:
-    cli
-    push byte 0
-    push byte 15
-    jmp isr_common
-
-; 16: Floating Point Exception
-isr16:
-    cli
-    push byte 0
-    push byte 16
-    jmp isr_common
-
-; 17: Alignment Check Exception
-isr17:
-    cli
-    push byte 0
-    push byte 17
-    jmp isr_common
-
-; 18: Machine Check Exception
-isr18:
-    cli
-    push byte 0
-    push byte 18
-    jmp isr_common
-
-; 19: Reserved
-isr19:
-    cli
-    push byte 0
-    push byte 19
-    jmp isr_common
-
-; 20: Reserved
-isr20:
-    cli
-    push byte 0
-    push byte 20
-    jmp isr_common
-
-; 21: Reserved
-isr21:
-    cli
-    push byte 0
-    push byte 21
-    jmp isr_common
-
-; 22: Reserved
-isr22:
-    cli
-    push byte 0
-    push byte 22
-    jmp isr_common
-
-; 23: Reserved
-isr23:
-    cli
-    push byte 0
-    push byte 23
-    jmp isr_common
-
-; 24: Reserved
-isr24:
-    cli
-    push byte 0
-    push byte 24
-    jmp isr_common
-
-; 25: Reserved
-isr25:
-    cli
-    push byte 0
-    push byte 25
-    jmp isr_common
-
-; 26: Reserved
-isr26:
-    cli
-    push byte 0
-    push byte 26
-    jmp isr_common
-
-; 27: Reserved
-isr27:
-    cli
-    push byte 0
-    push byte 27
-    jmp isr_common
-
-; 28: Reserved
-isr28:
-    cli
-    push byte 0
-    push byte 28
-    jmp isr_common
-
-; 29: Reserved
-isr29:
-    cli
-    push byte 0
-    push byte 29
-    jmp isr_common
-
-; 30: Reserved
-isr30:
-    cli
-    push byte 0
-    push byte 30
-    jmp isr_common
-
-; 31: Reserved
-isr31:
-    cli
-    push byte 0
-    push byte 31
-    jmp isr_common
+%endmacro
+; defining all the ISRs
+ISR_NOERRCODE	0	; 0: Division Error
+ISR_NOERRCODE	1	; 1: Debug
+ISR_NOERRCODE	2	; 2: Non-Maskable Interrupt
+ISR_NOERRCODE	3	; 3: Breakpoint
+ISR_NOERRCODE	4	; 4: OverFlow
+ISR_NOERRCODE	5	; 5: Bound range (out of bounds)
+ISR_NOERRCODE	6	; 6: Invalid Opcode
+ISR_NOERRCODE	7	; 7: Device Not Available
+ISR_ERRCODE		8	; 8: Double Fault
+ISR_NOERRCODE	9	; 9: Coprocessor Segment Overrun
+ISR_ERRCODE		10	; 10: Invalid TSS
+ISR_ERRCODE		11	; 11: Segment Not Present
+ISR_ERRCODE		12	; 12: Stack-Segment Fault
+ISR_ERRCODE		13	; 13: General Protection Fault
+ISR_ERRCODE		14	; 14: Page Fault
+ISR_NOERRCODE	15	; 15: Reserved
+ISR_NOERRCODE	16	; 16: Floating Point Exception
+ISR_ERRCODE	17	; 17: Alignment Check
+ISR_NOERRCODE	18	; 18: Machine Check
+ISR_NOERRCODE	19	; 19: SIMD Floating-Point Exception
+ISR_NOERRCODE	20	; 20: Virtualization Exception
+ISR_ERRCODE		21	; 21: Control Protection Exception
+ISR_NOERRCODE	22	; 22: Reserved
+ISR_NOERRCODE	23	; 23: Reserved
+ISR_NOERRCODE	24	; 24: Reserved
+ISR_NOERRCODE	25	; 25: Reserved
+ISR_NOERRCODE	26	; 26: Reserved
+ISR_NOERRCODE	27	; 27: Reserved
+ISR_NOERRCODE	28	; 28: Hypervisor Injection Exception
+ISR_ERRCODE		29	; 29: VMM Communication Exception
+ISR_ERRCODE		30	; 30: Security Exception
+ISR_NOERRCODE	31	; 31: Reserved

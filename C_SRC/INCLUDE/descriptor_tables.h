@@ -2,7 +2,7 @@
 # define DESCRIPTOR_TABLES
 
 # include "typedefs.h"
-
+# define USED_HANDLERS 32
 // IDT
 	/*
 		The interrupt descriptor table contains entry(gate) with the addresses to the routines of which you'll jump to
