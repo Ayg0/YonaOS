@@ -1,13 +1,16 @@
+#include "../../INCLUDE/irqs.h"
+#include "../../INCLUDE/system.h"
+#include "../../INCLUDE/display.h"
 #include "../../INCLUDE/descriptor_tables.h"
-#include "../../INCLUDE/libt.h"
+
 // idt vars
 _idt_gate	idt_gates[256];
 _idt_ptr	idt_p;
 
 // set the handler in it's own gate in the IDT
 static void	idt_set_gate(u8 index, u32 handler, u16 selector, u8 type_attr){
-	idt_gates[index].low_base = handler & 0xffff; 
-	idt_gates[index].high_base = (handler >> 16) & 0xffff; 
+	idt_gates[index].low_base = L16(handler); 
+	idt_gates[index].high_base = H16(handler); 
 	idt_gates[index].segment_sel = selector; 
 	idt_gates[index].always0 = 0;
 	idt_gates[index].type_attr = type_attr;
@@ -17,41 +20,42 @@ static void	idt_set_gate(u8 index, u32 handler, u16 selector, u8 type_attr){
 static	char *interrupt_msgs(u8 index){
 	switch (index)
 	{
-	case 0:		return (" Division By Zero");
-	case 1:		return (" One step exception");
-	case 2:		return (" Non Maskable Interrupt");
-    case 3:		return (" Breakpoint");
-    case 4:		return (" Overflow");
-    case 5:		return (" bound Range Exceeded");
-    case 6:		return (" Invalid Opcode");
-    case 7:		return (" Device Not Available");
-    case 8:		return (" Double Fault");
-    case 9:		return (" Coprocessor Segment Overrun");
-    case 10:	return (" Invalid TSS");
-    case 11:	return (" Segment Not Present");
-    case 12:	return (" Stack-Segment Fault");
-    case 13:	return (" General Protection Fault");
-    case 14:	return (" Page Fault");
-    case 15:	return (" Reserved");
-    case 16:	return (" x87 Floating-Point Exception");
-    case 17:	return (" Alignment Check");
-    case 18:	return (" Machine Check");
-    case 19:	return (" SIMD Floating-Point Exception");
-    case 20:	return (" Virtualization Exception");
-    case 21:	return (" Control Protection Exception");
-    case 22:	return (" Reserved");
-    case 23:	return (" Reserved");
-    case 24:	return (" Reserved");
-    case 25:	return (" Reserved");
-    case 26:	return (" Reserved");
-    case 27:	return (" Reserved");
-    case 28:	return (" Hypervisor Injection Exception");
-    case 29:	return (" VMM Communication Exception");
-    case 30:	return (" Security Exception");
-    case 31:	return (" Reserved");
-	default:	return (" Unknown");
+	case 0:		return ("Division By Zero");
+	case 1:		return ("One step exception");
+	case 2:		return ("Non Maskable Interrupt");
+    case 3:		return ("Breakpoint");
+    case 4:		return ("Overflow");
+    case 5:		return ("bound Range Exceeded");
+    case 6:		return ("Invalid Opcode");
+    case 7:		return ("Device Not Available");
+    case 8:		return ("Double Fault");
+    case 9:		return ("Coprocessor Segment Overrun");
+    case 10:	return ("Invalid TSS");
+    case 11:	return ("Segment Not Present");
+    case 12:	return ("Stack-Segment Fault");
+    case 13:	return ("General Protection Fault");
+    case 14:	return ("Page Fault");
+    case 15:	return ("Reserved");
+    case 16:	return ("x87 Floating-Point Exception");
+    case 17:	return ("Alignment Check");
+    case 18:	return ("Machine Check");
+    case 19:	return ("SIMD Floating-Point Exception");
+    case 20:	return ("Virtualization Exception");
+    case 21:	return ("Control Protection Exception");
+    case 22:	return ("Reserved");
+    case 23:	return ("Reserved");
+    case 24:	return ("Reserved");
+    case 25:	return ("Reserved");
+    case 26:	return ("Reserved");
+    case 27:	return ("Reserved");
+    case 28:	return ("Hypervisor Injection Exception");
+    case 29:	return ("VMM Communication Exception");
+    case 30:	return ("Security Exception");
+    case 31:	return ("Reserved");
+	default:	return ("Unknown");
 	}
 }
+// R https://wiki.osdev.org/IRQ
 // assigning each handler with it's corresponding gate
 static void	init_handlers(){
 	u32	handlers[] = {	
@@ -67,8 +71,9 @@ static void	init_handlers(){
 // initializing the idt
 void	init_idt(){
 	idt_p.limit = sizeof(_idt_gate) * (256 - 1);	// defining the size of the idt.
-	idt_p.base = (u32)&idt_gates;				// defining the start address of the idt.
-	init_handlers();							// filling the idt with the corresponding ISRS.
+	idt_p.base = (u32)&idt_gates;					// defining the start address of the idt.
+	remap_pic();									// remapping the Programmable Interrupt Controllers.
+	init_handlers();								// filling the idt with the corresponding ISRS.
 	__asm__ __volatile__ ("lidt (%%eax)": : "a"(&idt_p));	// loading the idt into the IDTR.
 }
 // the global handler that all signals call
@@ -78,5 +83,6 @@ extern void	isr_handler(_registers r){
 	set_default_attr(get_attr(YELLOW, BLACK));
 	put_nbr(r.int_no, HEX_FORMAT);
 	set_default_attr(WHITE_ON_BLACK);
+	put_str(" ");
 	put_str(interrupt_msgs(r.int_no));
 }

@@ -42,8 +42,8 @@
 		u8	type_attr;		// type_attr (4bits), DPL (2bits), P (1 bit)
 		/*  7 6  5 4       0
 			[P|PDL|type_attr]
-			https://wiki.osdev.org/Interrupt_Descriptor_Table#IDTR
-			https://stackoverflow.com/questions/3425085/the-difference-between-call-gate-interrupt-gate-trap-gate
+			R https://wiki.osdev.org/Interrupt_Descriptor_Table#IDTR
+			R https://stackoverflow.com/questions/3425085/the-difference-between-call-gate-interrupt-gate-trap-gate
 		*/
 		u16	high_base;		// high 16 bits of the address.
 	}	__attribute__((packed)) _idt_gate;
@@ -56,9 +56,9 @@
 	
 	typedef struct registers
 	{
-		//https://www.eecg.utoronto.ca/~amza/www.mindsec.com/files/x86regs.html
+		// R https://www.eecg.utoronto.ca/~amza/www.mindsec.com/files/x86regs.html
 		u32 ds;	// data segment selector
-		u32	edi, esi, ebp, esp, ebx, edx, ecx, eax; // pushed by pusha /*https://pdos.csail.mit.edu/6.828/2005/readings/i386/PUSHA.htm*/
+		u32	edi, esi, ebp, esp, ebx, edx, ecx, eax; // pushed by pusha R https://pdos.csail.mit.edu/6.828/2005/readings/i386/PUSHA.htm
 		u32 int_no, error_code;	// interrupt index and error code
 		u32	eip, cs, eflags, useresp, ss; // pushed by the cpu automatically
 	} _registers;

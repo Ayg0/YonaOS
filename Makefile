@@ -10,7 +10,6 @@ SRCDIR = C_SRC
 C_SRC := $(shell find $(SRCDIR) -type f -name '*.c')
 # C Objects
 C_OBJ := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(C_SRC))
-
 # ASM Code
 ASM_SRC := $(shell find $(SRCDIR) -type f -name '*.asm')
 # ASM Objects
@@ -32,7 +31,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.asm | $(OBJDIR)
 	nasm -f elf $< -o $@
 
 $(OBJDIR):
-	mkdir -p $(dir $(C_OBJ))
+	mkdir -p $(dir $(C_OBJ) $(ASM_OBJ))
 
 fclean:
 	rm -rf $(NAME) $(OBJDIR)/*

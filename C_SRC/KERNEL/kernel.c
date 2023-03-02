@@ -1,4 +1,6 @@
 #include "../INCLUDE/system.h"
+#include "../INCLUDE/display.h"
+#include "../INCLUDE/descriptor_tables.h"
 
 extern int	main();
 

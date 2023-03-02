@@ -2,6 +2,8 @@
 	"files.associations": {
 		"system.h": "c",
 		"libt.h": "c",
-		"descriptor_tables.h": "c"
+		"descriptor_tables.h": "c",
+		"macros.h": "c",
+		"irqs.h": "c"
 	}
 }

@@ -1,6 +1,6 @@
 #include "../INCLUDE/system.h"
 
-
+// R https://wiki.osdev.org/Inline_Assembly/Examples#I.2FO_access
 // asm ( assembler template : output operands : input operands);
 
 // Read a Byte from Port_number
@@ -35,4 +35,9 @@ void	Pbyte_out(u16 port_number, u8 value){
 // Write a Word to Port_number
 void	Pword_out(u16 port_number, u16 value){
 	__asm__ __volatile__ ("out %%ax, %%dx" : : "a"(value), "d"(port_number));
+}
+/* Wait a very small amount of time (1 to 4 microseconds, generally).
+Useful for implementing a small delay for PIC remapping on old hardware.*/
+void io_wait(void){
+    Pbyte_out(0x80, 0);
 }

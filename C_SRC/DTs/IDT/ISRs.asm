@@ -1,5 +1,5 @@
 ; Read more about those exceptions:
-;	https://wiki.osdev.org/Exceptions
+; R https://wiki.osdev.org/Exceptions
 
 [extern isr_handler]
 

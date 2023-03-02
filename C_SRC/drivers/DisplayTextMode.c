@@ -1,4 +1,15 @@
+#include "../INCLUDE/libt.h"
 #include "../INCLUDE/system.h"
+#include "../INCLUDE/display.h"
+
+	// DEVICE I/O ports
+	# define SCREEN_CRTL 0x3D4
+	/*
+		this is one of the most used indexed registers.
+		The index byte is written to the port given, then the data byte
+		can be read/written from/to port+1 (0x3D5)
+	*/
+	# define SCREEN_DATA 0x3D5
 
 screen	_screen;
 
@@ -23,10 +34,10 @@ u8	set_cursor(u8 x, u8 y){
 	location = _screen._cursor.x + (_screen._cursor.y * MAX_COL);
 	// read more about the Cursor Location High Register (Index 0x0E)
     Pbyte_out(SCREEN_CRTL, 0x0E);
-    Pbyte_out(SCREEN_DATA, (u8)(location >> 8));
+    Pbyte_out(SCREEN_DATA, (u8)H8(location));
 	// read more about the Cursor Location Low Register (Index 0x0F)
     Pbyte_out(SCREEN_CRTL, 0x0F);
-    Pbyte_out(SCREEN_DATA, (u8)(location & 0xff));
+    Pbyte_out(SCREEN_DATA, (u8)L8(location));
 	return 0;
 }
 // hide or show the cursor
