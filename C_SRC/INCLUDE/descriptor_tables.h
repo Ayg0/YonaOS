@@ -5,7 +5,7 @@
 // MACROS
 # define CODE_SEGMENT 0x08
 # define GDT_ENTRIES 3
-# define USED_HANDLERS 32
+# define USED_HANDLERS 48
 
 // GDT
 	/* R https://wiki.osdev.org/GDT_Tutorial
@@ -97,9 +97,27 @@
 	extern	void	isr29();
 	extern	void	isr30();
 	extern	void	isr31();
+
+	extern	void	irq0();
+	extern	void	irq1();
+	extern	void	irq2();
+	extern	void	irq3();
+	extern	void	irq4();
+	extern	void	irq5();
+	extern	void	irq6();
+	extern	void	irq7();
+	extern	void	irq8();
+	extern	void	irq9();
+	extern	void	irq10();
+	extern	void	irq11();
+	extern	void	irq12();
+	extern	void	irq13();
+	extern	void	irq14();
+	extern	void	irq15();
 	
 	void	init_idt();
 	void	init_descriptor_tables();
 	void	isr_handler(_registers r);
+	extern void	irq_handler(_registers r);
 	
 #endif

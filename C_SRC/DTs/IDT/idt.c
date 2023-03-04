@@ -1,11 +1,19 @@
 #include "../../INCLUDE/irqs.h"
 #include "../../INCLUDE/system.h"
 #include "../../INCLUDE/display.h"
+#include "../../INCLUDE/typedefs.h"
 #include "../../INCLUDE/descriptor_tables.h"
 
 // idt vars
 _idt_gate	idt_gates[256];
 _idt_ptr	idt_p;
+u32			handlers[USED_HANDLERS] = {	
+		(u32)isr0, (u32)isr1, (u32)isr2, (u32)isr3,(u32)isr4, (u32)isr5, (u32)isr6, (u32)isr7, (u32)isr8, (u32)isr9, 
+		(u32)isr10, (u32)isr11, (u32)isr12, (u32)isr13, (u32)isr14, (u32)isr15, (u32)isr16, (u32)isr17, (u32)isr18, (u32)isr19, 
+		(u32)isr20, (u32)isr21, (u32)isr22, (u32)isr23, (u32)isr24, (u32)isr25, (u32)isr26, (u32)isr27, (u32)isr28, (u32)isr29, 
+		(u32)isr30, (u32)isr31, (u32)irq0, (u32)irq1, (u32)irq2, (u32)irq3,(u32)irq4, (u32)irq5, (u32)irq6, (u32)irq7, (u32)irq8,
+		(u32)irq9, (u32)irq10, (u32)irq11, (u32)irq12, (u32)irq13, (u32)irq14, (u32)irq15
+	};
 
 // set the handler in it's own gate in the IDT
 static void	idt_set_gate(u8 index, u32 handler, u16 selector, u8 type_attr){
@@ -58,12 +66,6 @@ static	char *interrupt_msgs(u8 index){
 // R https://wiki.osdev.org/IRQ
 // assigning each handler with it's corresponding gate
 static void	init_handlers(){
-	u32	handlers[] = {	
-		(u32)isr0, (u32)isr1, (u32)isr2, (u32)isr3,(u32)isr4, (u32)isr5, (u32)isr6, (u32)isr7, (u32)isr8, (u32)isr9, 
-		(u32)isr10, (u32)isr11, (u32)isr12, (u32)isr13, (u32)isr14, (u32)isr15, (u32)isr16, (u32)isr17, (u32)isr18, (u32)isr19, 
-		(u32)isr20, (u32)isr21, (u32)isr22, (u32)isr23, (u32)isr24, (u32)isr25, (u32)isr26, (u32)isr27, (u32)isr28, (u32)isr29, 
-		(u32)isr30, (u32)isr31
-	};
 	//remember updating the number of handlers if you add one
 	for (u8 i = 0; i < USED_HANDLERS; i++)
 		idt_set_gate(i, handlers[i], CODE_SEGMENT, 0x8E);

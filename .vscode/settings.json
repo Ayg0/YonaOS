@@ -4,6 +4,8 @@
 		"libt.h": "c",
 		"descriptor_tables.h": "c",
 		"macros.h": "c",
-		"irqs.h": "c"
+		"irqs.h": "c",
+		"timer.h": "c",
+		"display.h": "c"
 	}
 }

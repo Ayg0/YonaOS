@@ -16,4 +16,5 @@ void	Pword_out(u16 port_number, u16 value);
 void	Pbyte_out(u16 port_number, u8 value);
 u16		Pword_in(u16 port_number);
 u8		Pbyte_in(u16 port_number);
+void	io_wait(void);
 #endif
