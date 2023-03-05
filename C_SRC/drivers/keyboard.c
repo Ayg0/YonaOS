@@ -7,8 +7,8 @@
 // R https://dev.to/frosnerd/writing-my-own-keyboard-driver-16kh
 // R http://www.brokenthorn.com/Resources/OSDev19.html
 
-_buffer buf;
-u8 nl_flag = 0;
+_buffer		buf;
+_key_flags	flags;
 
 u8	get_char(u8 scancode){
 	switch (scancode)
@@ -25,49 +25,52 @@ u8	get_char(u8 scancode){
 	case 0x0B: return '0';
 	case 0x0C: return '-';
 	case 0x1C:
+		flags.NL = 1;
 		new_line();
-		nl_flag = 1;
 		return 0;
 	case 0x0D: return '=';
 	case 0x0E:
 		return back_space();
-	case 0x10: return 'Q';
-	case 0x11: return 'W';
-	case 0x12: return 'E';
-	case 0x13: return 'R';
-	case 0x14: return 'T';
-	case 0x15: return 'Y';
-	case 0x16: return 'U';
-	case 0x17: return 'I';
-	case 0x18: return 'O';
-	case 0x19: return 'P';
+	case 0x10: return ('q' - 32 * flags.CAPLOCK);
+	case 0x11: return ('w' - 32 * flags.CAPLOCK);
+	case 0x12: return ('e' - 32 * flags.CAPLOCK);
+	case 0x13: return ('r' - 32 * flags.CAPLOCK);
+	case 0x14: return ('t' - 32 * flags.CAPLOCK);
+	case 0x15: return ('y' - 32 * flags.CAPLOCK);
+	case 0x16: return ('u' - 32 * flags.CAPLOCK);
+	case 0x17: return ('i' - 32 * flags.CAPLOCK);
+	case 0x18: return ('o' - 32 * flags.CAPLOCK);
+	case 0x19: return ('p' - 32 * flags.CAPLOCK);
 	case 0x1A: return '[';
 	case 0x1B: return ']';
-	case 0x1E: return 'A';
-	case 0x1F: return 'S';
-	case 0x20: return 'D';
-	case 0x21: return 'F';
-	case 0x22: return 'G';
-	case 0x23: return 'H';
-	case 0x24: return 'J';
-	case 0x25: return 'K';
-	case 0x26: return 'L';
+	case 0x1E: return ('a' - 32 * flags.CAPLOCK);
+	case 0x1F: return ('s' - 32 * flags.CAPLOCK);
+	case 0x20: return ('d' - 32 * flags.CAPLOCK);
+	case 0x21: return ('f' - 32 * flags.CAPLOCK);
+	case 0x22: return ('g' - 32 * flags.CAPLOCK);
+	case 0x23: return ('h' - 32 * flags.CAPLOCK);
+	case 0x24: return ('j' - 32 * flags.CAPLOCK);
+	case 0x25: return ('k' - 32 * flags.CAPLOCK);
+	case 0x26: return ('l' - 32 * flags.CAPLOCK);
 	case 0x27: return ';';
 	case 0x28: return '\'';
 	case 0x29: return '`';
 	case 0x2B: return '\\';
-	case 0x2C: return 'Z';
-	case 0x2D: return 'X';
-	case 0x2E: return 'C';
-	case 0x3F: return 'V';
-	case 0x30: return 'B';
-	case 0x31: return 'N';
-	case 0x32: return 'M';
+	case 0x2C: return ('z' - 32 * flags.CAPLOCK);
+	case 0x2D: return ('x' - 32 * flags.CAPLOCK);
+	case 0x2E: return ('c' - 32 * flags.CAPLOCK);
+	case 0x3F: return ('v' - 32 * flags.CAPLOCK);
+	case 0x30: return ('b' - 32 * flags.CAPLOCK);
+	case 0x31: return ('n' - 32 * flags.CAPLOCK);
+	case 0x32: return ('m' - 32 * flags.CAPLOCK);
 	case 0x33: return ',';
 	case 0x34: return '.';
 	case 0x35: return '/';
 	case 0x37: return '*';
 	case 0x39: return ' ';
+	case 0x3A:
+		flags.CAPLOCK = !flags.CAPLOCK;
+		return 0;
 	default: return 0;
 	}
 }
@@ -97,7 +100,7 @@ u8	get_buffer_index(){
 void	clear_keyboard_buffer(){
 	t_byteSet(buf.buffer, 0, buf.index);
 	buf.index = 0;
-	nl_flag = 0;
+	flags.NL = 0;
 }
 
 u8 back_space(){
@@ -111,10 +114,11 @@ u8 back_space(){
 
 
 u8	keyboad_new_line(){
-	return (nl_flag);
+	return (flags.NL);
 }
 
 void	init_keyboard(){
 	set_handler(33, (u32)keyboard_call);
+	t_WordSet((void *)&flags, 0, 3);
 	clear_keyboard_buffer();
 }

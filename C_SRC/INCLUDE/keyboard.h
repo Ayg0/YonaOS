@@ -10,6 +10,16 @@ typedef struct buffer
 	u8 index;
 } _buffer;
 
+typedef struct keyboard_flags
+{
+	u8	NL;
+	u8	ALT;
+	u8	CTRL;
+	u8	SHIFT;
+	u8	NUMLOCK;
+	u8	CAPLOCK;
+} _key_flags;
+
 
 u8 		back_space();
 _buffer	*get_buffer();
