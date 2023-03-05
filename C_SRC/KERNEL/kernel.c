@@ -7,33 +7,60 @@
 #include "../INCLUDE/descriptor_tables.h"
 
 extern int	main();
-
+u8 HOLD;
 
 void	main_init(){
+	HOLD = 1;
 	screen_init(1);
 	init_descriptor_tables();
 	init_timer(50);
 	init_keyboard();
 	__asm__ __volatile__ ("sti");
 }
+void exit(){
+	HOLD = 0;
+	clrs();
+	put_str("Nice Work now turn the power-off\r\n:( Idk how to do it yet.");
+	cursor_mode(0);
+}
+
+char *valid_cmds[] = {
+	"clear",
+	"draw",
+	"exit",
+	"time",
+	"date",
+	"set time",
+	"set date",
+};
+
+void (*functions[])() = {
+	clrs,
+	draw_face,
+	exit,
+	put_time,
+	put_date,
+	set_time,
+	set_date,
+};
+
+void	check_and_exec(char *buff){
+	u32 i;
+	void (*f)();
+
+	for (i = 0; valid_cmds[i]; i++){
+		if (!t_strcmp(buff, valid_cmds[i]))
+			functions[i]();
+	}
+}
 
 int	main() {
 	main_init();
 
-	while (1)
+	while (HOLD)
 	{
-		put_str("KASH $> ");
-		while (!keyboad_new_line());
-		if (!t_strcmp(get_buffer()->buffer, "draw"))
-			draw_face();
-		if (!t_strcmp(get_buffer()->buffer, "clear"))
-			clrs();
-		else if (!t_strcmp(get_buffer()->buffer, "exit")){
-			clrs();
-			put_str("Nice Work now turn the power-off\r\n:( Idk how to do it yet.");
-			cursor_mode(0);
-			break ;
-		}
+		prompt("YOT $> ");
+		check_and_exec(get_buffer()->buffer);
 		clear_keyboard_buffer();
 	}
 	return (5);

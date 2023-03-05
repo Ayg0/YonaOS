@@ -31,45 +31,57 @@ u8	get_char(u8 scancode){
 	case 0x0D: return '=';
 	case 0x0E:
 		return back_space();
-	case 0x10: return ('q' - 32 * flags.CAPLOCK);
-	case 0x11: return ('w' - 32 * flags.CAPLOCK);
-	case 0x12: return ('e' - 32 * flags.CAPLOCK);
-	case 0x13: return ('r' - 32 * flags.CAPLOCK);
-	case 0x14: return ('t' - 32 * flags.CAPLOCK);
-	case 0x15: return ('y' - 32 * flags.CAPLOCK);
-	case 0x16: return ('u' - 32 * flags.CAPLOCK);
-	case 0x17: return ('i' - 32 * flags.CAPLOCK);
-	case 0x18: return ('o' - 32 * flags.CAPLOCK);
-	case 0x19: return ('p' - 32 * flags.CAPLOCK);
+	case 0x10: return ('q' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x11: return ('w' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x12: return ('e' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x13: return ('r' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x14: return ('t' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x15: return ('y' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x16: return ('u' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x17: return ('i' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x18: return ('o' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x19: return ('p' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
 	case 0x1A: return '[';
 	case 0x1B: return ']';
-	case 0x1E: return ('a' - 32 * flags.CAPLOCK);
-	case 0x1F: return ('s' - 32 * flags.CAPLOCK);
-	case 0x20: return ('d' - 32 * flags.CAPLOCK);
-	case 0x21: return ('f' - 32 * flags.CAPLOCK);
-	case 0x22: return ('g' - 32 * flags.CAPLOCK);
-	case 0x23: return ('h' - 32 * flags.CAPLOCK);
-	case 0x24: return ('j' - 32 * flags.CAPLOCK);
-	case 0x25: return ('k' - 32 * flags.CAPLOCK);
-	case 0x26: return ('l' - 32 * flags.CAPLOCK);
+	case 0x1E: return ('a' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x1F: return ('s' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x20: return ('d' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x21: return ('f' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x22: return ('g' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x23: return ('h' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x24: return ('j' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x25: return ('k' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x26: return ('l' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
 	case 0x27: return ';';
 	case 0x28: return '\'';
 	case 0x29: return '`';
 	case 0x2B: return '\\';
-	case 0x2C: return ('z' - 32 * flags.CAPLOCK);
-	case 0x2D: return ('x' - 32 * flags.CAPLOCK);
-	case 0x2E: return ('c' - 32 * flags.CAPLOCK);
-	case 0x3F: return ('v' - 32 * flags.CAPLOCK);
-	case 0x30: return ('b' - 32 * flags.CAPLOCK);
-	case 0x31: return ('n' - 32 * flags.CAPLOCK);
-	case 0x32: return ('m' - 32 * flags.CAPLOCK);
+	case 0x2C: return ('z' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x2D: return ('x' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x2E: return ('c' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x3F: return ('v' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x30: return ('b' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x31: return ('n' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
+	case 0x32: return ('m' - 32 * CAP_OPT(flags.CAPLOCK, flags.SHIFT));
 	case 0x33: return ',';
 	case 0x34: return '.';
 	case 0x35: return '/';
 	case 0x37: return '*';
 	case 0x39: return ' ';
+	case 0x2A:
+		flags.SHIFT = 1;
+		return 0;
+	case 0x36:
+		flags.SHIFT = 1;
+		return 0;
 	case 0x3A:
 		flags.CAPLOCK = !flags.CAPLOCK;
+		return 0;
+	case 0xAA:
+		flags.SHIFT = 0;
+		return 0;
+	case 0xB6:
+		flags.SHIFT = 0;
 		return 0;
 	default: return 0;
 	}
@@ -113,7 +125,7 @@ u8 back_space(){
 }
 
 
-u8	keyboad_new_line(){
+u8	keyboard_new_line(){
 	return (flags.NL);
 }
 

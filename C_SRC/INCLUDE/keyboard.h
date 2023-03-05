@@ -20,11 +20,12 @@ typedef struct keyboard_flags
 	u8	CAPLOCK;
 } _key_flags;
 
+# define CAP_OPT(CAPLOCK, SHIFT) (CAPLOCK & !SHIFT | !CAPLOCK & SHIFT)
 
 u8 		back_space();
 _buffer	*get_buffer();
 void	init_keyboard();
 u8		get_buffer_index();
-u8		keyboad_new_line();
+u8		keyboard_new_line();
 void	clear_keyboard_buffer();
 #endif

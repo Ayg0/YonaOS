@@ -1,1 +1,1 @@
-qemu-system-x86_64 boot.bin
+qemu-system-x86_64 BUILD/Yona.bin

@@ -42,15 +42,18 @@
 
 typedef struct time
 {
-	u8 s;
-	u8 m;
-	u8 h;
-	u8 d;
-	u8 mo;
+	u8 	s;
+	u8 	m;
+	u8 	h;
+	u8 	d;
+	u8 	mo;
+	u32 year;
 } _time;
 
-
-
+void	put_date();
+void	put_time();
+void	set_date();
+void	set_time();
 void	init_timer(u32 frequency);
 void	tick(_registers r);
 

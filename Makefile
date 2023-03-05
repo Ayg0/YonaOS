@@ -33,8 +33,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.asm | $(OBJDIR)
 $(OBJDIR):
 	mkdir -p $(dir $(C_OBJ) $(ASM_OBJ))
 
-fclean:
-	rm -rf $(NAME) $(OBJDIR)/*
-re:
-	make fclean && make
+clean:
+	rm -rf $(OBJDIR)/*
+
+fclean: clean
+	rm -rf $(NAME)
+re: fclean all
 .PHONY: OBJ fclean all 
