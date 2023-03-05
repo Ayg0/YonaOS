@@ -2,6 +2,7 @@
 [extern main]
 call main
 
-jmp $
-cli
-hlt
+huh:
+	cli
+	hlt
+	jmp huh

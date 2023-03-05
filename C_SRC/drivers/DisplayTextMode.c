@@ -101,8 +101,8 @@ void	display_back_space(){
 	_screen._cursor.y += y;
 	x = _screen._cursor.x;
 	y = _screen._cursor.y;
-	put_char(' ', 1, 0);
-	set_cursor(x,y);
+	put_char(' ', 1, 1);
+	set_cursor(x, y);
 }
 
 // puts a character into the screen

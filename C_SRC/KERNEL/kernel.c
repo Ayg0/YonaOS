@@ -24,13 +24,13 @@ int	main() {
 	{
 		put_str("KASH $> ");
 		while (!keyboad_new_line());
-		if (!t_strcmp(get_buffer()->buffer, "TRAIN"))
-			draw_train();
+		if (!t_strcmp(get_buffer()->buffer, "DRAW"))
+			draw_face();
 		if (!t_strcmp(get_buffer()->buffer, "CLEAR"))
 			clrs();
 		else if (!t_strcmp(get_buffer()->buffer, "EXIT")){
 			clrs();
-			put_str("bye bye");
+			put_str("Nice Work now turn the power-off\r\n:( Idk how to do it yet.");
 			cursor_mode(0);
 			break ;
 		}
