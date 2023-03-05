@@ -6,6 +6,7 @@
 		"macros.h": "c",
 		"irqs.h": "c",
 		"timer.h": "c",
-		"display.h": "c"
+		"display.h": "c",
+		"keyboard.h": "c"
 	}
 }

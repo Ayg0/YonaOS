@@ -2,6 +2,16 @@
 # define DISPLAY_H
 # include "typedefs.h"
 
+// DEVICE I/O ports
+	# define SCREEN_CRTL 0x3D4
+	/*
+		this is one of the most used indexed registers.
+		The index byte is written to the port given, then the data byte
+		can be read/written from/to port+1 (0x3D5)
+	*/
+	# define SCREEN_DATA 0x3D5
+
+
 //SCREEN RELATED
 	# define VIDEOMEMORY 0xb8000
 	# define MAX_COL 80
@@ -57,6 +67,9 @@ u8		get_attr(u8 foreground_color, u8 back_ground_color);
 u8		position_check();
 u8		set_cursor(u8 x, u8 y);
 void	screen_init(u16 mode);
+void	protection_flag(u8 state);
 void	clrs();
+void	new_line();
+void	display_back_space();
 
 #endif

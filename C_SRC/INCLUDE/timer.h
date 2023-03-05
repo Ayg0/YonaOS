@@ -3,6 +3,8 @@
 # include "descriptor_tables.h"
 # include "irqs.h"
 
+# define FREQUENCY 50
+
 // Channel 0 data port (read/write)
 # define C0DP 		0x40
 // Channel 1 data port (read/write)
@@ -36,6 +38,17 @@
 
 // Command register configuration Macro
 # define CONFIGURE_PIT(CHANNEL, ACCESS_MODE, OPERATING_MODE, BCD_BINARY) CHANNEL | ACCESS_MODE | OPERATING_MODE | BCD_BINARY
+
+
+typedef struct time
+{
+	u8 s;
+	u8 m;
+	u8 h;
+	u8 d;
+	u8 mo;
+} _time;
+
 
 
 void	init_timer(u32 frequency);

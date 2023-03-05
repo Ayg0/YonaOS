@@ -2,15 +2,6 @@
 #include "../INCLUDE/system.h"
 #include "../INCLUDE/display.h"
 
-	// DEVICE I/O ports
-	# define SCREEN_CRTL 0x3D4
-	/*
-		this is one of the most used indexed registers.
-		The index byte is written to the port given, then the data byte
-		can be read/written from/to port+1 (0x3D5)
-	*/
-	# define SCREEN_DATA 0x3D5
-
 screen	_screen;
 
 // basic screen init
@@ -24,6 +15,7 @@ void	screen_init(u16 mode){
 void	set_default_attr(u16 attr){
 	_screen.default_attr = attr;
 }
+
 // setting the location of the cursor
 u8	set_cursor(u8 x, u8 y){
 	u16 location;
@@ -61,6 +53,18 @@ int	put_nbr_base(u32 nbr, char *s, u8 base_len){
 	return (7);
 }
 
+void	LineBeginning(){
+	set_cursor(0, _screen._cursor.y);
+}
+
+void	new_line_only(){
+	set_cursor(_screen._cursor.x, ++_screen._cursor.y);
+}
+
+void	new_line(){
+	set_cursor(0, ++_screen._cursor.y);
+}
+
 // check the position if it's valid
 u8	position_check(){
 	u8	err_flag = 0;
@@ -88,13 +92,26 @@ u8	position_check(){
 	return(err_flag);
 }
 
+void	display_back_space(){
+	u8 x, y;
+
+	x = -(_screen._cursor.x != 0) + ((_screen._cursor.x == 0) * (MAX_COL - 1));
+	y = -(_screen._cursor.x == 0);
+	_screen._cursor.x += x;
+	_screen._cursor.y += y;
+	x = _screen._cursor.x;
+	y = _screen._cursor.y;
+	put_char(' ', 1, 0);
+	set_cursor(x,y);
+}
+
 // puts a character into the screen
 void	put_char(u8 c, u8 use_default, u16 attr){
 	u32	location;
 
 	if (use_default)
 		attr = _screen.default_attr;
-	_screen._cursor.mode && position_check();
+	position_check(); // protection flag for the check
 	location = (_screen._cursor.x + _screen._cursor.y * MAX_COL) * 2;
 	*((u8 *)VIDEOMEMORY + location) = c;
 	*((u8 *)VIDEOMEMORY + location + 1) = attr;
@@ -111,9 +128,9 @@ u8	put_str(u8 *s){
 	{
 		//put_nbr(_screen._cursor.x, DECIMAL_FORMAT);
 		if (s[i] == '\r')
-			set_cursor((_screen._cursor.x = 0), (_screen._cursor.y));
+			LineBeginning();
 		else if (s[i] == '\n')
-			set_cursor(_screen._cursor.x, ++_screen._cursor.y);
+			new_line_only();
 		else
 			put_char(s[i], 1, 0);
 		i++;
