@@ -2,6 +2,8 @@
 # define DISPLAY_H
 # include "typedefs.h"
 
+// R http://www.osdever.net/FreeVGA/vga/vga.htm#register
+
 // DEVICE I/O ports
 	# define SCREEN_CRTL 0x3D4
 	/*
@@ -10,7 +12,6 @@
 		can be read/written from/to port+1 (0x3D5)
 	*/
 	# define SCREEN_DATA 0x3D5
-
 
 //SCREEN RELATED
 	# define VIDEOMEMORY 0xb8000
@@ -42,17 +43,39 @@
 # define YELLOW			0x0E
 # define WHITE			0x0F
 
+// USED THE CODE FROM R https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c
+// I tried to read more from the www.osdever.net, while still not having a very clear understanding, I'll use it for now to switch
+
+# define MISC_OUTPUT_REG_WR 0x3C2 // http://www.osdever.net/FreeVGA/vga/extreg.htm
+# define FEATURE_CTRL_REG	0x3DA	
+
+# define SEQ_REG_ADDR		0x3C4 // http://www.osdever.net/FreeVGA/vga/seqreg.htm
+# define SEQ_REG_DATA		0x3C5
+
+# define CRTC_REG_ADDR		0x3D4 // http://www.osdever.net/FreeVGA/vga/crtcreg.htm
+# define CRTC_REG_DATA		0x3D5
+
+# define GRAP_REG_ADDR		0x3CE // http://www.osdever.net/FreeVGA/vga/graphreg.htm
+# define GRAP_REG_DATA		0x3CF
+
+# define ATTR_REG_ADDR		0x3C0 // http://www.osdever.net/FreeVGA/vga/attrreg.htm
+# define ATTR_REG_DATA		0x3C1
+
+# define TEXT_MODE_80x25		0
+# define VIDEO_MODE_320x200x256	1
+
 typedef struct s_cursor
 {
 	u8	mode;
 	u8	x;
-	u8 y;
+	u8	y;
 }	cursor;
 
 typedef struct s_screen
 {
 	cursor	_cursor;
-	u16		default_attr;
+	u8		default_attr;
+	u8		screen_mode;
 }	screen;
 
 
@@ -71,5 +94,6 @@ void	protection_flag(u8 state);
 void	clrs();
 void	new_line();
 void	display_back_space();
+void	change_vga_mode(u8 mode);
 
 #endif

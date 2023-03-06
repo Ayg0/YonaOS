@@ -7,6 +7,7 @@
 		"irqs.h": "c",
 		"timer.h": "c",
 		"display.h": "c",
-		"keyboard.h": "c"
+		"keyboard.h": "c",
+		"typedefs.h": "c"
 	}
 }

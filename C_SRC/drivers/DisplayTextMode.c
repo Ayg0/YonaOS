@@ -6,6 +6,8 @@ screen	_screen;
 
 // basic screen init
 void	screen_init(u16 mode){
+	_screen.screen_mode = TEXT_MODE_80x25;
+	change_vga_mode(_screen.screen_mode);
 	_screen._cursor.mode = 1;
 	_screen._cursor.x = 0;
 	_screen._cursor.y = 0;

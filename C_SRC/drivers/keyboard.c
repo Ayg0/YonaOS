@@ -124,7 +124,6 @@ u8 back_space(){
 	return (0);
 }
 
-
 u8	keyboard_new_line(){
 	return (flags.NL);
 }

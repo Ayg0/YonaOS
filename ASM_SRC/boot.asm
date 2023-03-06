@@ -30,8 +30,8 @@ Reading_error:
 	jmp inf
 
 change_vid_mod:
-	mov ah, 0x0 ; text mode (it will clear the screen).
-	mov al, 0x3
+	mov ah, 0x0
+	mov al, 0x03  ; text mode (it will clear the screen).
 	int 0x10
 ; switching to 32 bit protected mode:
 	; disable inturrupts bye bye BIOS

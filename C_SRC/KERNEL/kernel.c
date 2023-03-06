@@ -63,5 +63,6 @@ int	main() {
 		check_and_exec(get_buffer()->buffer);
 		clear_keyboard_buffer();
 	}
+	
 	return (5);
 }
