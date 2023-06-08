@@ -1,3 +1,6 @@
+## Warning:
+  the project got upgraded to [Yona2.0](https://github.com/Ayg0/YonaOs2.0)
+
 # YonaOS
 a Hobby Operating System, minimalistic 32bit machine to run my weird code, check the gettoknow website for insight and code explaination, also if you have any seggestion or noticed something wrong I'll be happy if you contacted me.
 ## Tasks:
@@ -27,5 +30,3 @@ a Hobby Operating System, minimalistic 32bit machine to run my weird code, check
    ```
     $> bash run.sh
    ```
-## Warning:
-  the project got upgraded to [Yona2.0](https://github.com/Ayg0/YonaOs2.0)
